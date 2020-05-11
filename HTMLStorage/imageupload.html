@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+    <script src="azure-storage-blob.min.js" charset="utf-8"></script>
+<style>
+    #head{
+        background-color: blue;
+        color:white;
+        font:18pt arial;
+        padding:5px;
+    }
+    body{ margin:0}
+    #select-button{
+        margin:5px;
+    }
+    #status{
+        margin:5px;
+        font:10pt Verdana;
+    }
+</style>
+</head>
+<body>
+<div id=head>Upload image to Powerpoint</div>
+    <button id="select-button">Select and upload files</button>
+    <input type="file" id="file-input" multiple style="display: none;" />
+    <div id="status"><b>Status:</b>
+    <p id="status" />
+    </div>
+<script>
+
+var queryString = location.search;
+var urlParams = new URLSearchParams(location.search);
+var id=urlParams.get('id');
+
+console.log(id)
+
+const selectButton = document.getElementById("select-button");
+const fileInput = document.getElementById("file-input");
+const status = document.getElementById("status");
+
+const accountName = "lampptdemo";
+const sasString = "?st=...";
+const containerName = "upload";
+
+const containerURL = new azblob.ContainerURL(
+    `https://${accountName}.blob.core.windows.net/${containerName}?${sasString}`,
+    azblob.StorageURL.newPipeline(new azblob.AnonymousCredential));
+
+//UPLOAD
+const uploadFiles = async () => {
+    try {
+        reportStatus("Uploading files...");
+        const promises = [];
+        for (const file of fileInput.files) {
+            const blockBlobURL = azblob.BlockBlobURL.fromContainerURL(containerURL, id);
+            promises.push(azblob.uploadBrowserDataToBlockBlob(
+                azblob.Aborter.none, file, blockBlobURL));
+        }
+        await Promise.all(promises);
+        reportStatus("Done.");
+    } catch (error) {
+        reportStatus(error.body);
+    }
+}
+
+selectButton.addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", uploadFiles);
+
+
+const reportStatus = message => {
+    status.innerHTML += `${message}<br/>`;
+    status.scrollTop = status.scrollHeight;
+}    
+</script>
+</body>
+</html>
