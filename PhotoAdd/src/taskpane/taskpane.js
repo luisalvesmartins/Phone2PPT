@@ -20,7 +20,7 @@ Office.onReady(info => {
     document.getElementById("app-body").style.display = "flex";
     document.getElementById("insert").onclick = newImage;
 
-    document.getElementById("run").onclick = pasteImage;
+    //document.getElementById("run").onclick = pasteImage;
   }
 });
 
@@ -49,13 +49,10 @@ function toDataURL(url, callback) {
 var id,tt;
 
 async function newImage() {
-  // id
   id = uuidv4();
-  //id="a020d03c-4ff8-415c-beda-e67f83558131"
   document.getElementById("debug").innerHTML=id;
   //CREATE THE QR CODE
-  var qrcodeSVGElement = document.createElement("SVG");
-  //$("#debug").append("AFTER1")
+  var qrcodeSVGElement = document.getElementById("divQRcode");
   try{
     var qrcode = new QRCode(qrcodeSVGElement, {
       width: 400,
@@ -69,21 +66,6 @@ async function newImage() {
 
   }
   qrcode.makeCode(BACKENDURL + "?id=" + id);
-  
-  Office.context.document.setSelectedDataAsync(
-    qrcodeSVGElement.innerHTML,
-    {
-      coercionType: Office.CoercionType.XmlSvg,
-      imageLeft: 50,
-      imageTop: 50,
-      imageWidth: 300
-    },
-    function(asyncResult) {
-      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-        console.error(asyncResult.error.message);
-      }
-    }
-  );
   
   counter=0;
   window.setTimeout(pasteImage,1000);
