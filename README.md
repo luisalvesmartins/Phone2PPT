@@ -6,14 +6,25 @@ Spent some of my free time in the weekend doing an addin for Powerpoint to trans
  
 
 The story goes like this: 
-- Using the addin the user adds a QRCode on powerpoint- Points at it with the phone. The phone recognizes the qrcode (it's pointing to a webpage)
-- User Points at it with the phone. The phone recognizes the qrcode and User uploads the photo from the phone.
+- Using the addin a QRCode is displayed in the task pane. User points at it with the phone camera. The phone recognizes the qrcode (it's pointing to a webpage)
+- User uploads the photo using the website from the phone.
 - The photo appears automagically in the powerpoint.
 
 In an image:
 ![image](docs/all.png)
 
-## Steps to run
+## Steps to test it
+
+- Goto www.office.com 
+- open a new powerpoint document 
+- do Insert
+- Select Add-ins
+- Manage My Add-ins
+- Use "Upload my add-in"
+- Point to: https://raw.githubusercontent.com/luisalvesmartins/Phone2PPT/master/PhotoAdd/manifest.xml
+- Open the taskpane and test it
+
+## Steps to deploy 
 
 Deploy website in Azure Storage:
 
